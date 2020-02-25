@@ -1,39 +1,29 @@
-<RootWidget>:
-    tittle: 'Player de Musica'
+<MusicPlayer>:
     #Botão de reproduzir
-    Button:
-        size_hint: .5, .09
-        pos_hint: {"center_x": .5, "center_y": .1}
-
-        text: "Reproduzir"
-
-        on_press: app.play_music
-
-    #Botão de parar
     Button:
         size_hint: .5, .09
         pos_hint: {"center_x": .5, "center_y": .2}
 
+        text: "Reproduzir"
+
+        on_release: root.play_music()
+
+    #Botão de parar
+    Button:
+        size_hint: .5, .09
+        pos_hint: {"center_x": .5, "center_y": .1}
+
         text: "Parar"
 
-        on_press: app.stop_music()
+        on_release: root.stop_music()
 
-    TextInput:
-        id: pathinput
+    Label:
+        text: 'Player de musica'
+        font_size: '50dp'
+        bold: True
 
-        size_hint: 0.4, 0.08
-        pos_hint: {'x': .3, 'y': .5}
-
-        on_text: app.printPath()
-        text: 'Digite o path da musica aqui'
-
-<TextInput>:
-
-    RelativeLayout:
-        orientation: 'vertical'
-        pos: self.pos
-        size: root.size
-        id: pathinp
-
-        #Entrada do path da musica
-
+    Label:
+        text: 'By: Marcilio'
+        font_size: '10dp'
+        x: 0
+        y: -30
