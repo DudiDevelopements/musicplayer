@@ -14,17 +14,6 @@ pygame.init()
 music_path = ''
 
 
-def play_music():
-    pygame.mixer.music.load(music_path)
-    pygame.mixer.music.play()
-    pygame.mixer.music.set_volume(1)
-
-    pygame.time.Clock()
-    clock.tick(10)
-
-
-def stop_music():
-    pygame.mixer.music.stop()
 
 
 class TextInput(Widget):
@@ -43,6 +32,17 @@ class PlayApp(App):
     def printPath(self):
         music_path = self.root.ids.pathinput.text
         print(music_path)
+
+    def play_music(self):
+        pygame.mixer.music.load(music_path)
+        pygame.mixer.music.play()
+        pygame.mixer.music.set_volume(1)
+
+        pygame.time.Clock()
+        clock.tick(10)
+
+    def stop_music(self):
+        pygame.mixer.music.stop()
 
 
 PlayApp().run()
