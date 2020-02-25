@@ -7,12 +7,16 @@
 
         text: "Reproduzir"
 
+        on_press: app.play_music
+
     #Botão de parar
     Button:
         size_hint: .5, .09
         pos_hint: {"center_x": .5, "center_y": .2}
 
         text: "Parar"
+
+        on_press: app.stop_music()
 
     TextInput:
         id: pathinput
