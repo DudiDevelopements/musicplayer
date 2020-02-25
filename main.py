@@ -1,48 +1,62 @@
+"""
+
+    Projeto: 'Player de música (com kivy)'
+    De: Marcilio (e um pouco de Deyvid)
+
+"""
+
 # Importa o kivy:
 from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout
+from kivy.core.audio import SoundLoader
+from kivy.core.audio import Sound
+from kivy.uix.filechooser import FileSystemLocal
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 
-# Importa o necessario para reproduzir o som:
-import pygame
-import os
+# Classe principal do app
+class MusicPlayer(FloatLayout):
 
-# Inicializa o pygame
-pygame.init()
+    # Ao inicializar procura por arquivos com final .mp3
+    def __init__(self, **kwargs):
+        super(MusicPlayer, self).__init__(**kwargs)
 
-music_path = ''
+        file_system = FileSystemLocal()
+
+        self.listaMusicas = []
+
+        for arquivoMusica in file_system.listdir('coloque o source da musica aqui'):
+            if '.mp3' in arquivoMusica:
+                self.listaMusicas.append(arquivoMusica)
+
+        self.indexMusicaAtual = 0
+        print(self.indexMusicaAtual)
+        print(self.listaMusicas)
+
+    # Função que é chamada ao clicar no botão "Reproduzir"
+    def play_music(self):
+        
+        self.musica = SoundLoader.load('coloque o source da musica aqui'+self.listaMusicas[self.indexMusicaAtual])
+
+        self.musica.play()
+        self.indexMusicaAtual = self.indexMusicaAtual + 1
+
+        if self.indexMusicaAtual == len(self.listaMusicas):
+            self.indexMusicaAtual = 0
+
+        print(self.indexMusicaAtual)
+
+    # Função que é chamada ao clicar no botão "Parar"
+    def stop_music(self):
+        self.musica.stop()
 
 
-
-
-class TextInput(Widget):
-    pass
-
-
-class RootWidget(FloatLayout):
-    pass
-
-
+# Classe que builda o app
 class PlayApp(App):
 
     def build(self):
-        return RootWidget()
-
-    def printPath(self):
-        music_path = self.root.ids.pathinput.text
-        print(music_path)
-
-    def play_music(self):
-        pygame.mixer.music.load(music_path)
-        pygame.mixer.music.play()
-        pygame.mixer.music.set_volume(1)
-
-        pygame.time.Clock()
-        clock.tick(10)
-
-    def stop_music(self):
-        pygame.mixer.music.stop()
+        return MusicPlayer()
 
 
+# Função que da run no app
 PlayApp().run()
