@@ -1,18 +1,25 @@
+# -*- coding: utf-8 -*-
+from kivy.app import App
+from kivy.core.audio import SoundLoader, Sound
+from kivy.uix.filechooser import FileSystemLocal
+from kivy.uix.floatlayout import FloatLayout
+from kivy.properties import StringProperty
+
 """
 
     Projeto: 'Player de música (com kivy)'
-    De: Marcilio (e um pouco de Deyvid)
+    De: Marcilio
+
+
+    Onde está escrito 'coloque o path da musica aqui', você devera colocar o
+    path inteiro da pasta de onde estão as musicas como:
+
+    'C:/Users/usuario/full/path/Player/musicas/' 
+    
+    tem que ter o barra no final ou você recebera um erro
 
 """
 
-# Importa o kivy:
-from kivy.app import App
-from kivy.uix.floatlayout import FloatLayout
-from kivy.core.audio import SoundLoader
-from kivy.core.audio import Sound
-from kivy.uix.filechooser import FileSystemLocal
-from kivy.uix.widget import Widget
-from kivy.uix.button import Button
 
 # Classe principal do app
 class MusicPlayer(FloatLayout):
@@ -23,9 +30,11 @@ class MusicPlayer(FloatLayout):
 
         file_system = FileSystemLocal()
 
+        # Atribui a variável lista listaMusicas
         self.listaMusicas = []
 
-        for arquivoMusica in file_system.listdir('coloque o source da musica aqui'):
+        # Verifica cada .mp3 que estiver na pasta escrita e coloca na lista 'listaMusicas'
+        for arquivoMusica in file_system.listdir('C:/Users/Verena Ortiz/Desktop/marcilinho/PythonP/Player/musicas'):
             if '.mp3' in arquivoMusica:
                 self.listaMusicas.append(arquivoMusica)
 
@@ -33,30 +42,67 @@ class MusicPlayer(FloatLayout):
         print(self.indexMusicaAtual)
         print(self.listaMusicas)
 
-    # Função que é chamada ao clicar no botão "Reproduzir"
-    def play_music(self):
-        
-        self.musica = SoundLoader.load('coloque o source da musica aqui'+self.listaMusicas[self.indexMusicaAtual])
+        # Carrega a musica com o index que esta tocando
+        self.musica = SoundLoader.load(
+            'C:/Users/Verena Ortiz/Desktop/marcilinho/PythonP/Player/musicas/' + self.listaMusicas[
+                self.indexMusicaAtual])
 
-        self.musica.play()
-        self.indexMusicaAtual = self.indexMusicaAtual + 1
+        Sound.volume = 1
 
-        if self.indexMusicaAtual == len(self.listaMusicas):
+    # Verifica se o index for maior que o numero de musicas
+    def verificarIndex(self):
+        if self.indexMusicaAtual > len(self.listaMusicas) - 1:
             self.indexMusicaAtual = 0
 
-        print(self.indexMusicaAtual)
+    # Função que é chamada ao clicar no botão "Reproduzir"
+    def play_music(self):
+
+        self.indexMusicaAtual = 0
+
+        # Da play da musica que foi carregada no init
+        self.musica.play()
+        self.musica_text.text = StringProperty(self.listaMusicas[self.indexMusicaAtual])
+
+        print("Tocando: " + self.listaMusicas[self.indexMusicaAtual - 1])
+        self.verificarIndex()
 
     # Função que é chamada ao clicar no botão "Parar"
     def stop_music(self):
         self.musica.stop()
+        self.indexMusicaAtual = 0
+
+    # Função que ao clicar em 'proxima' adiciona em 1 no index
+    def proxima(self):
+        self.musica.stop()
+        self.musica = SoundLoader.load(
+            'C:/Users/Verena Ortiz/Desktop/marcilinho/PythonP/Player/musicas/' + self.listaMusicas[
+                self.indexMusicaAtual])
+        self.indexMusicaAtual += 1
+        self.musica.play()
+        print("Tocando: " + self.listaMusicas[self.indexMusicaAtual - 1])
+        self.verificarIndex()
+
+    # Função que ao clicar em 'anterior' diminui em 1 no index
+    def anterior(self):
+        self.musica.stop()
+        self.musica = SoundLoader.load(
+            'C:/Users/Verena Ortiz/Desktop/marcilinho/PythonP/Player/musicas/' + self.listaMusicas[
+                self.indexMusicaAtual])
+        self.indexMusicaAtual -= 1
+        self.musica.play()
+        print("Tocando: " + self.listaMusicas[self.indexMusicaAtual - 1])
+        self.verificarIndex()
 
 
 # Classe que builda o app
 class PlayApp(App):
 
     def build(self):
+        self.icon = "ico.png"
+        self.title = "Player de Música"
         return MusicPlayer()
 
 
 # Função que da run no app
-PlayApp().run()
+if __name__ == '__main__':
+    PlayApp().run()
