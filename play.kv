@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*-
 <MusicPlayer>:
+    music_text: musica_text
     #Botão de reproduzir
     Button:
         size_hint: .5, .09
@@ -17,13 +19,32 @@
 
         on_release: root.stop_music()
 
+    #Botão de voltar
+    Button:
+        size_hint: .15, .09
+        pos_hint: {"center_x": .17, "center_y": .2}
+
+        text: "Anterior"
+
+        on_release: root.anterior()
+
+    #Botão de avançar
+    Button:
+        size_hint: .15, .09
+        pos_hint: {"center_x": .83, "center_y": .2}
+
+        text: "Proxima"
+
+        on_release: root.proxima()
+
+    #Label exibindo "Player de musica"
     Label:
         text: 'Player de musica'
         font_size: '50dp'
         bold: True
+        color: 0, .5, 1, 1
 
     Label:
-        text: 'By: Marcilio'
-        font_size: '10dp'
-        x: 0
-        y: -30
+        id: musica_text
+        pos_hint: {'center_x': .5, 'center_y': .43}
+        text: 'Nenhuma musica tocando no momento'
