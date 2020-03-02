@@ -3,7 +3,6 @@ from kivy.app import App
 from kivy.core.audio import SoundLoader, Sound
 from kivy.uix.filechooser import FileSystemLocal
 from kivy.uix.floatlayout import FloatLayout
-from kivy.properties import StringProperty
 
 """
 
@@ -15,7 +14,7 @@ from kivy.properties import StringProperty
     path inteiro da pasta de onde estão as musicas como:
 
     'C:/Users/usuario/full/path/Player/musicas/' 
-    
+
     tem que ter o barra no final ou você recebera um erro
 
 """
@@ -24,7 +23,7 @@ from kivy.properties import StringProperty
 # Classe principal do app
 class MusicPlayer(FloatLayout):
 
-    # Ao inicializar procura por arquivos com final .mp3
+    # Função que é executada ao iniciar
     def __init__(self, **kwargs):
         super(MusicPlayer, self).__init__(**kwargs)
 
@@ -34,7 +33,7 @@ class MusicPlayer(FloatLayout):
         self.listaMusicas = []
 
         # Verifica cada .mp3 que estiver na pasta escrita e coloca na lista 'listaMusicas'
-        for arquivoMusica in file_system.listdir('C:/Users/Verena Ortiz/Desktop/marcilinho/PythonP/Player/musicas'):
+        for arquivoMusica in file_system.listdir('F://marcilinho/PythonP/Player/musicas'):
             if '.mp3' in arquivoMusica:
                 self.listaMusicas.append(arquivoMusica)
 
@@ -44,8 +43,8 @@ class MusicPlayer(FloatLayout):
 
         # Carrega a musica com o index que esta tocando
         self.musica = SoundLoader.load(
-            'C:/Users/Verena Ortiz/Desktop/marcilinho/PythonP/Player/musicas/' + self.listaMusicas[
-                self.indexMusicaAtual])
+            'F:/marcilinho/PythonP/Player/musicas/' +
+            self.listaMusicas[self.indexMusicaAtual])
 
         Sound.volume = 1
 
@@ -57,13 +56,12 @@ class MusicPlayer(FloatLayout):
     # Função que é chamada ao clicar no botão "Reproduzir"
     def play_music(self):
 
-        self.indexMusicaAtual = 0
-
         # Da play da musica que foi carregada no init
         self.musica.play()
-        self.musica_text.text = StringProperty(self.listaMusicas[self.indexMusicaAtual])
+        print("Tocando: " + self.listaMusicas[self.indexMusicaAtual])
 
-        print("Tocando: " + self.listaMusicas[self.indexMusicaAtual - 1])
+        self.ids.musica_text.text = self.listaMusicas[self.indexMusicaAtual]
+
         self.verificarIndex()
 
     # Função que é chamada ao clicar no botão "Parar"
@@ -71,26 +69,34 @@ class MusicPlayer(FloatLayout):
         self.musica.stop()
         self.indexMusicaAtual = 0
 
+        self.ids.musica_text.text = "Nenhuma musica tocando no momento"
+
     # Função que ao clicar em 'proxima' adiciona em 1 no index
     def proxima(self):
         self.musica.stop()
-        self.musica = SoundLoader.load(
-            'C:/Users/Verena Ortiz/Desktop/marcilinho/PythonP/Player/musicas/' + self.listaMusicas[
-                self.indexMusicaAtual])
         self.indexMusicaAtual += 1
+        self.musica = SoundLoader.load(
+            'F:/marcilinho/PythonP/Player/musicas/' +
+            self.listaMusicas[self.indexMusicaAtual])
         self.musica.play()
-        print("Tocando: " + self.listaMusicas[self.indexMusicaAtual - 1])
+        print("Tocando: " + self.listaMusicas[self.indexMusicaAtual])
+
+        self.ids.musica_text.text = self.listaMusicas[self.indexMusicaAtual]
+
         self.verificarIndex()
 
     # Função que ao clicar em 'anterior' diminui em 1 no index
     def anterior(self):
         self.musica.stop()
-        self.musica = SoundLoader.load(
-            'C:/Users/Verena Ortiz/Desktop/marcilinho/PythonP/Player/musicas/' + self.listaMusicas[
-                self.indexMusicaAtual])
         self.indexMusicaAtual -= 1
+        self.musica = SoundLoader.load(
+            'F:/marcilinho/PythonP/Player/musicas/' +
+            self.listaMusicas[self.indexMusicaAtual])
         self.musica.play()
-        print("Tocando: " + self.listaMusicas[self.indexMusicaAtual - 1])
+        print("Tocando: " + self.listaMusicas[self.indexMusicaAtual])
+
+        self.ids.musica_text.text = self.listaMusicas[self.indexMusicaAtual]
+
         self.verificarIndex()
 
 

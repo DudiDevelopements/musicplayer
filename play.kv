@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 <MusicPlayer>:
-    music_text: musica_text
     #Botão de reproduzir
     Button:
         size_hint: .5, .09
@@ -8,7 +7,7 @@
 
         text: "Reproduzir"
 
-        on_release: root.play_music()
+        on_press: root.play_music()
 
     #Botão de parar
     Button:
@@ -17,7 +16,7 @@
 
         text: "Parar"
 
-        on_release: root.stop_music()
+        on_press: root.stop_music()
 
     #Botão de voltar
     Button:
