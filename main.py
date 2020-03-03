@@ -38,8 +38,6 @@ class MusicPlayer(FloatLayout):
                 self.listaMusicas.append(arquivoMusica)
 
         self.indexMusicaAtual = 0
-        print(self.indexMusicaAtual)
-        print(self.listaMusicas)
 
         # Carrega a musica com o index que esta tocando
         self.musica = SoundLoader.load(
@@ -48,56 +46,65 @@ class MusicPlayer(FloatLayout):
 
         Sound.volume = 1
 
+############### Funções Adicionais ###############
+
     # Verifica se o index for maior que o numero de musicas
     def verificarIndex(self):
+        """
+        Se o index da música for maior que a quantidade de de musicas
+        ele volta o index a zero
+        """
         if self.indexMusicaAtual > len(self.listaMusicas) - 1:
             self.indexMusicaAtual = 0
+
+    def mostraNomeMusica(self):
+        # Mostra no console
+        print("Tocando: " + self.listaMusicas[self.indexMusicaAtual])
+        # Mostra na interface
+        self.ids.musica_text.text = self.listaMusicas[self.indexMusicaAtual]
+
+    ############### Funções Principais ###############
 
     # Função que é chamada ao clicar no botão "Reproduzir"
     def play_music(self):
 
         # Da play da musica que foi carregada no init
         self.musica.play()
-        print("Tocando: " + self.listaMusicas[self.indexMusicaAtual])
-
-        self.ids.musica_text.text = self.listaMusicas[self.indexMusicaAtual]
-
+        self.mostraNomeMusica()
         self.verificarIndex()
 
     # Função que é chamada ao clicar no botão "Parar"
+    def proxima(self):
+        self.musica.stop()
+        self.indexMusicaAtual += 1
+
+        self.musica = SoundLoader.load(
+            'F:/marcilinho/PythonP/Player/musicas/' +
+            self.listaMusicas[self.indexMusicaAtual])
+
+        self.musica.play()
+        self.mostraNomeMusica()
+        self.verificarIndex()
+
+    # Função que ao clicar em 'proxima' adiciona em 1 no index
+    def anterior(self):
+        self.musica.stop()
+        self.indexMusicaAtual -= 1
+
+        self.musica = SoundLoader.load(
+            'F:/marcilinho/PythonP/Player/musicas/' +
+            self.listaMusicas[self.indexMusicaAtual])
+
+        self.musica.play()
+        self.mostraNomeMusica()
+        self.verificarIndex()
+
+    # Função que ao clicar em 'anterior' diminui em 1 no index
     def stop_music(self):
         self.musica.stop()
         self.indexMusicaAtual = 0
 
         self.ids.musica_text.text = "Nenhuma musica tocando no momento"
-
-    # Função que ao clicar em 'proxima' adiciona em 1 no index
-    def proxima(self):
-        self.musica.stop()
-        self.indexMusicaAtual += 1
-        self.musica = SoundLoader.load(
-            'F:/marcilinho/PythonP/Player/musicas/' +
-            self.listaMusicas[self.indexMusicaAtual])
-        self.musica.play()
-        print("Tocando: " + self.listaMusicas[self.indexMusicaAtual])
-
-        self.ids.musica_text.text = self.listaMusicas[self.indexMusicaAtual]
-
-        self.verificarIndex()
-
-    # Função que ao clicar em 'anterior' diminui em 1 no index
-    def anterior(self):
-        self.musica.stop()
-        self.indexMusicaAtual -= 1
-        self.musica = SoundLoader.load(
-            'F:/marcilinho/PythonP/Player/musicas/' +
-            self.listaMusicas[self.indexMusicaAtual])
-        self.musica.play()
-        print("Tocando: " + self.listaMusicas[self.indexMusicaAtual])
-
-        self.ids.musica_text.text = self.listaMusicas[self.indexMusicaAtual]
-
-        self.verificarIndex()
 
 
 # Classe que builda o app
