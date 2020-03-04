@@ -9,14 +9,6 @@ from kivy.uix.floatlayout import FloatLayout
     Projeto: 'Player de música (com kivy)'
     De: Marcilio
 
-
-    Onde está escrito 'coloque o path da musica aqui', você devera colocar o
-    path inteiro da pasta de onde estão as musicas como:
-
-    'C:/Users/usuario/full/path/Player/musicas/' 
-
-    tem que ter o barra no final ou você recebera um erro
-
 """
 
 
@@ -27,26 +19,23 @@ class MusicPlayer(FloatLayout):
     def __init__(self, **kwargs):
         super(MusicPlayer, self).__init__(**kwargs)
 
-        file_system = FileSystemLocal()
+        self.file_system = FileSystemLocal()
 
-        # Atribui a variável lista listaMusicas
         self.listaMusicas = []
 
-        # Verifica cada .mp3 que estiver na pasta escrita e coloca na lista 'listaMusicas'
-        for arquivoMusica in file_system.listdir('F://marcilinho/PythonP/Player/musicas'):
-            if '.mp3' in arquivoMusica:
-                self.listaMusicas.append(arquivoMusica)
+        self.path_musica = str()
+
+        self.musicaPath = str()
+        self.musica = SoundLoader.load('F:/marcilinho/PythonP/Player/musicas/')
 
         self.indexMusicaAtual = 0
 
-        # Carrega a musica com o index que esta tocando
-        self.musica = SoundLoader.load(
-            'F:/marcilinho/PythonP/Player/musicas/' +
-            self.listaMusicas[self.indexMusicaAtual])
+        # F:/marcilinho/PythonP/Player/musicas/
 
         Sound.volume = 1
 
-############### Funções Adicionais ###############
+
+###############     Funções Adicionais     ###############
 
     # Verifica se o index for maior que o numero de musicas
     def verificarIndex(self):
@@ -63,24 +52,42 @@ class MusicPlayer(FloatLayout):
         # Mostra na interface
         self.ids.musica_text.text = self.listaMusicas[self.indexMusicaAtual]
 
-    ############### Funções Principais ###############
+    def salvaPathMusica(self):
+        self.path_musica = self.ids.musica_source.text
+
+        # Verifica cada .mp3 que estiver na pasta escrita e coloca na lista 'listaMusicas'
+        for arquivoMusica in self.file_system.listdir(self.path_musica):
+            if '.mp3' in arquivoMusica:
+                self.listaMusicas.append(arquivoMusica)
+
+        self.ids.musica_text.text = 'Salvo'
+
+        print(self.path_musica)
+        print('')
+        print(self.listaMusicas)
+
+    def carregaMusica(self):
+        self.musicaPath = self.path_musica + self.listaMusicas[self.indexMusicaAtual]
+
+        self.musica = SoundLoader.load(self.musicaPath)
+
+        
+###############    Funções Principais    ##############
 
     # Função que é chamada ao clicar no botão "Reproduzir"
     def play_music(self):
+        self.carregaMusica()
 
-        # Da play da musica que foi carregada no init
         self.musica.play()
         self.mostraNomeMusica()
         self.verificarIndex()
 
-    # Função que é chamada ao clicar no botão "Parar"
+    # Função que ao clicar em 'anterior' diminui em 1 no index
     def proxima(self):
         self.musica.stop()
-        self.indexMusicaAtual += 1
 
-        self.musica = SoundLoader.load(
-            'F:/marcilinho/PythonP/Player/musicas/' +
-            self.listaMusicas[self.indexMusicaAtual])
+        self.indexMusicaAtual += 1
+        self.carregaMusica()
 
         self.musica.play()
         self.mostraNomeMusica()
@@ -89,11 +96,9 @@ class MusicPlayer(FloatLayout):
     # Função que ao clicar em 'proxima' adiciona em 1 no index
     def anterior(self):
         self.musica.stop()
-        self.indexMusicaAtual -= 1
 
-        self.musica = SoundLoader.load(
-            'F:/marcilinho/PythonP/Player/musicas/' +
-            self.listaMusicas[self.indexMusicaAtual])
+        self.indexMusicaAtual -= 1
+        self.carregaMusica()
 
         self.musica.play()
         self.mostraNomeMusica()
@@ -116,6 +121,5 @@ class PlayApp(App):
         return MusicPlayer()
 
 
-# Função que da run no app
 if __name__ == '__main__':
     PlayApp().run()
