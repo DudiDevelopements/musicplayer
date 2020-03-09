@@ -82,7 +82,7 @@ class MusicPlayer(FloatLayout):
         self.mostraNomeMusica()
         self.verificarIndex()
 
-    # Função que ao clicar em 'anterior' diminui em 1 no index
+    # Função que ao clicar em 'proxima' diminui em 1 no index
     def proxima(self):
         self.musica.stop()
 
@@ -93,7 +93,7 @@ class MusicPlayer(FloatLayout):
         self.mostraNomeMusica()
         self.verificarIndex()
 
-    # Função que ao clicar em 'proxima' adiciona em 1 no index
+    # Função que ao clicar em 'anterior' adiciona em 1 no index
     def anterior(self):
         self.musica.stop()
 
